@@ -1,8 +1,9 @@
 import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useLoginUserMutation } from "../../store/api";
 
 const loginSchema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -13,11 +14,13 @@ const loginSchema = yup.object().shape({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [login, { isLoading }] = useLoginUserMutation();
+
   const {
     control,
     handleSubmit,
     formState: { errors },
-    formState: { isValid },
   } = useForm<yup.InferType<typeof loginSchema>>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
@@ -26,10 +29,24 @@ const Login = () => {
     },
   });
 
-  const submitHandler = (values: yup.InferType<typeof loginSchema>) => {
+  const submitHandler = async (values: yup.InferType<typeof loginSchema>) => {
     // Handle form submission here, e.g., send data to server or perform validation
 
-    console.log("Form submitted:", values);
+    // console.log("Form submitted:", values);
+    const res: any = await login(values);
+    // console.log(res);
+
+    if (res?.error?.originalStatus) {
+      alert(res.error.data);
+      return;
+    }
+
+    if (res?.data?.status === 200) {
+      const token = res?.data.data;
+      localStorage.setItem("token", token);
+      alert(res.data.message);
+      navigate("/");
+    }
   };
 
   return (
@@ -39,7 +56,7 @@ const Login = () => {
         height: "100%",
         display: "flex",
         justifyContent: "center",
-        marginTop: "10rem",
+        paddingTop: "10rem",
       }}
     >
       <Grid item xs={10} sm={8} md={6}>
@@ -86,7 +103,7 @@ const Login = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  // disabled={!isValid}
+                  disabled={isLoading}
                 >
                   Login
                 </Button>

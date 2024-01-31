@@ -1,9 +1,10 @@
 import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCreateUserMutation } from "../../store/api";
+import { ErrorType } from "../../types";
 
 const registerSchema = yup.object().shape({
   name: yup.string().required("user name is required"),
@@ -19,14 +20,13 @@ const registerSchema = yup.object().shape({
 });
 
 const Register = () => {
-  const [newUser, { isLoading, isSuccess }] = useCreateUserMutation();
+  const [newUser, { isLoading }] = useCreateUserMutation();
   const navigate = useNavigate();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    formState: { isValid },
   } = useForm<yup.InferType<typeof registerSchema>>({
     resolver: yupResolver(registerSchema),
     defaultValues: {
@@ -39,14 +39,13 @@ const Register = () => {
   const submitHandler = async (
     values: yup.InferType<typeof registerSchema>
   ) => {
-    // Handle form submission here, e.g., send data to server or perform validation
+    const res: ErrorType | any = await newUser(values);
 
-    console.log("Form submitted:", values);
-    const res = await newUser(values);
-    // @ts-ignore
-    const status = res.error.originalStatus;
-    if (status === 409) {
-      alert("User with this email already exists");
+    const Message = res.error?.data;
+    const Status = res?.error.originalStatus;
+
+    if (Status) {
+      alert(Message);
       navigate("/sign-in");
     }
   };
@@ -58,7 +57,7 @@ const Register = () => {
         height: "100%",
         display: "flex",
         justifyContent: "center",
-        marginTop: "10rem",
+        paddingTop: "10rem",
       }}
     >
       <Grid item xs={10} sm={8} md={6}>
@@ -120,7 +119,7 @@ const Register = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  // disabled={!isValid}
+                  disabled={isLoading}
                 >
                   Register
                 </Button>

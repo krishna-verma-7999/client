@@ -6,6 +6,11 @@ interface User {
   password: string;
 }
 
+interface LoginDetails {
+  email: string;
+  password: string;
+}
+
 export const myApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -19,7 +24,41 @@ export const myApi = createApi({
         body: user,
       }),
     }),
+    loginUser: builder.mutation<LoginDetails, any>({
+      query: (user) => ({
+        url: "api/auth/login",
+        method: "POST",
+        body: user,
+      }),
+    }),
+    getUserByTokenId: builder.mutation<any, string>({
+      query: (token) => ({
+        url: "/api/auth/user",
+        method: "POST",
+        body: { token: token },
+      }),
+    }),
+    getAllUser: builder.mutation<any, string>({
+      query: (token) => ({
+        url: "/api/auth/getAllUsers",
+        method: "POST",
+        body: { token: token },
+      }),
+    }),
+    createTask: builder.mutation<any, any>({
+      query: (body) => ({
+        url: "/api/auth/createTask",
+        method: "POST",
+        body: body,
+      }),
+    }),
   }),
 });
 
-export const { useCreateUserMutation } = myApi;
+export const {
+  useCreateUserMutation,
+  useLoginUserMutation,
+  useGetUserByTokenIdMutation,
+  useGetAllUserMutation,
+  useCreateTaskMutation,
+} = myApi;
