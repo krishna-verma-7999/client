@@ -52,6 +52,13 @@ export const myApi = createApi({
         body: body,
       }),
     }),
+    getAllTodoTask: builder.mutation<any, any>({
+      query: (token) => ({
+        url: "/api/auth/getAllTask",
+        method: "POST",
+        body: { token },
+      }),
+    }),
   }),
 });
 
@@ -61,4 +68,5 @@ export const {
   useGetUserByTokenIdMutation,
   useGetAllUserMutation,
   useCreateTaskMutation,
+  useGetAllTodoTaskMutation,
 } = myApi;
