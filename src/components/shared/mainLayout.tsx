@@ -250,7 +250,7 @@ export default function MainLayout({
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        <Typography paragraph>{children}</Typography>
+        <Box>{children}</Box>
       </Box>
     </Box>
   );

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useLoginUserMutation } from "../../store/api";
+import { useLoginUserMutation } from "../../services/authApi";
 
 const loginSchema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -30,19 +30,10 @@ const Login = () => {
   });
 
   const submitHandler = async (values: yup.InferType<typeof loginSchema>) => {
-    // Handle form submission here, e.g., send data to server or perform validation
-
-    // console.log("Form submitted:", values);
     const res: any = await login(values);
-    // console.log(res);
 
-    if (res?.error?.originalStatus) {
-      alert(res.error.data);
-      return;
-    }
-
-    if (res?.data?.status === 200) {
-      const token = res?.data.data;
+    if (res?.data?.status) {
+      const token = res?.data.token;
       localStorage.setItem("token", token);
       alert(res.data.message);
       navigate("/");

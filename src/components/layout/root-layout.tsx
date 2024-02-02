@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/auth-slice";
 import { useGetUserByTokenIdMutation } from "../../store/api";
-import MiniDrawer from "../shared/mainLayout";
+
 import MainLayout from "../shared/mainLayout";
 
 const RootLayout = () => {
@@ -18,8 +18,7 @@ const RootLayout = () => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       if (token) {
-        const data: any = await getUser(token);
-        // console.log(data?.data);
+        const data: any = await getUser();
         dispatch(
           setUser({
             isAuthenticated: true,

@@ -36,7 +36,7 @@ const taskSchema = yup.object().shape({
 });
 
 const CreateTask = () => {
-  const [newUser, { isLoading }] = useGetAllUserMutation();
+  const [AllEmployee, { isLoading }] = useGetAllUserMutation();
   const [users, setUsers] = useState<any>();
 
   const [createTask] = useCreateTaskMutation();
@@ -61,7 +61,8 @@ const CreateTask = () => {
     async function getAllUsers() {
       const token = localStorage.getItem("token");
       if (token) {
-        const res: any = await newUser(token);
+        const res: any = await AllEmployee();
+        console.log(res);
         setUsers(res.data);
       }
     }
@@ -73,7 +74,6 @@ const CreateTask = () => {
     const token = localStorage.getItem("token");
     const body = {
       ...values,
-      token: token,
     };
     const res: any = await createTask(body);
     if (res.data) {

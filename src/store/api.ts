@@ -1,14 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-interface User {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface LoginDetails {
-  email: string;
-  password: string;
+interface updateStatus {
+  assignedId: string;
+  updatedStatus: string;
 }
 
 export const myApi = createApi({
@@ -17,32 +11,22 @@ export const myApi = createApi({
     baseUrl: "http://localhost:8080/",
   }),
   endpoints: (builder) => ({
-    createUser: builder.mutation<User, User>({
-      query: (user) => ({
-        url: "api/auth/register",
-        method: "POST",
-        body: user,
-      }),
-    }),
-    loginUser: builder.mutation<LoginDetails, any>({
-      query: (user) => ({
-        url: "api/auth/login",
-        method: "POST",
-        body: user,
-      }),
-    }),
-    getUserByTokenId: builder.mutation<any, string>({
-      query: (token) => ({
+    getUserByTokenId: builder.mutation<any, void>({
+      query: () => ({
         url: "/api/auth/user",
-        method: "POST",
-        body: { token: token },
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }),
     }),
-    getAllUser: builder.mutation<any, string>({
-      query: (token) => ({
+    getAllUser: builder.mutation<any, void>({
+      query: () => ({
         url: "/api/auth/getAllUsers",
-        method: "POST",
-        body: { token: token },
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }),
     }),
     createTask: builder.mutation<any, any>({
@@ -50,23 +34,37 @@ export const myApi = createApi({
         url: "/api/auth/createTask",
         method: "POST",
         body: body,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }),
     }),
-    getAllTodoTask: builder.mutation<any, any>({
-      query: (token) => ({
+    getAllTodoTask: builder.mutation<any, void>({
+      query: () => ({
         url: "/api/auth/getAllTask",
         method: "POST",
-        body: { token },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }),
+    }),
+    updateTodoStatus: builder.mutation<any, updateStatus>({
+      query: (updatedData) => ({
+        url: "/api/auth/updateTask",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: updatedData,
       }),
     }),
   }),
 });
 
 export const {
-  useCreateUserMutation,
-  useLoginUserMutation,
   useGetUserByTokenIdMutation,
   useGetAllUserMutation,
   useCreateTaskMutation,
   useGetAllTodoTaskMutation,
+  useUpdateTodoStatusMutation,
 } = myApi;

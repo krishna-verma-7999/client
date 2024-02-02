@@ -18,8 +18,7 @@ const AuthLayout = () => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       if (token) {
-        const data: any = await getUser(token);
-        // console.log(data?.data);
+        const data: any = await getUser();
         dispatch(
           setUser({
             isAuthenticated: true,

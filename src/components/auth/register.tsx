@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useCreateUserMutation } from "../../store/api";
-import { ErrorType } from "../../types";
+import { useCreateUserMutation } from "../../services/authApi";
+import { ResponseData } from "../../types";
 
 const registerSchema = yup.object().shape({
   name: yup.string().required("user name is required"),
@@ -39,13 +39,11 @@ const Register = () => {
   const submitHandler = async (
     values: yup.InferType<typeof registerSchema>
   ) => {
-    const res: ErrorType | any = await newUser(values);
+    const res: any = await newUser(values);
+    const data: ResponseData = res.data;
 
-    const Message = res.error?.data;
-    const Status = res?.error.originalStatus;
-
-    if (Status) {
-      alert(Message);
+    if (data.status) {
+      alert(data.message);
       navigate("/sign-in");
     }
   };
@@ -57,7 +55,7 @@ const Register = () => {
         height: "100%",
         display: "flex",
         justifyContent: "center",
-        paddingTop: "10rem",
+        paddingTop: "5rem",
       }}
     >
       <Grid item xs={10} sm={8} md={6}>
