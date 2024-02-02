@@ -71,10 +71,10 @@ const CreateTask = () => {
   }, []);
 
   const submitHandler = async (values: yup.InferType<typeof taskSchema>) => {
-    const token = localStorage.getItem("token");
     const body = {
       ...values,
     };
+    console.log(values);
     const res: any = await createTask(body);
     if (res.data) {
       alert("Task has been created");

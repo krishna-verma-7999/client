@@ -26,7 +26,7 @@ const Board = () => {
       if (token) {
         const res: any = await getTodos();
         const todos: Todos[] = res.data;
-        if (todos.length > 0) {
+        if (todos?.length > 0) {
           const formattedData = formatData(todos);
           setTodos(formattedData);
         }
@@ -102,7 +102,7 @@ const Board = () => {
                             opacity: snapshot.isDragging ? "0.5" : "1",
                           }}
                         >
-                          <Card>{task.title}</Card>
+                          <Card task={task} />
                         </div>
                       )}
                     </Draggable>

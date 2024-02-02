@@ -2,4 +2,14 @@
   background-color: #e0e0e0;
   margin-block: 6px;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card__subtitle {
+  font-size: 10px;
+}
+.card__time {
+  font-size: 10px;
+  color: #2b2727;
 }

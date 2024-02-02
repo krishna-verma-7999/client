@@ -37,3 +37,10 @@ export interface KanbanBoards {
   title: string;
   tasks?: Task[];
 }
+
+export interface UserDetails {
+  _id: string;
+  name: string;
+  role: string;
+  email: string;
+}

@@ -243,7 +243,11 @@ export default function MainLayout({
               >
                 <Logout />
               </ListItemIcon>
-              <ListItemText primary={"Logout"} sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText
+                key={"List Item Text"}
+                primary={"Logout"}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
             </ListItemButton>
           </ListItem>
         </List>
