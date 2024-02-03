@@ -31,7 +31,9 @@ const Login = () => {
 
   const submitHandler = async (values: yup.InferType<typeof loginSchema>) => {
     const res: any = await login(values);
-
+    if (res?.error?.status === 404) {
+      alert("Not found");
+    }
     if (res?.data?.status) {
       const token = res?.data.token;
       localStorage.setItem("token", token);

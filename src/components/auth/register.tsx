@@ -1,4 +1,12 @@
-import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Grid,
+  Paper,
+  Typography,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
@@ -17,6 +25,7 @@ const registerSchema = yup.object().shape({
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/,
       "Password must contain at least one uppercase letter, one lowercase letter, and one number"
     ),
+  asAdmin: yup.boolean().required(),
 });
 
 const Register = () => {
@@ -33,6 +42,7 @@ const Register = () => {
       name: "",
       email: "",
       password: "",
+      asAdmin: false,
     },
   });
 
@@ -41,7 +51,6 @@ const Register = () => {
   ) => {
     const res: any = await newUser(values);
     const data: ResponseData = res.data;
-
     if (data.status) {
       alert(data.message);
       navigate("/sign-in");
@@ -107,6 +116,20 @@ const Register = () => {
                       fullWidth
                       error={!!errors.password}
                       helperText={errors.password && errors.password.message}
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Controller
+                  name="asAdmin"
+                  control={control}
+                  render={({ field }) => (
+                    <FormControlLabel
+                      control={
+                        <Checkbox {...field} checked={field.value === true} />
+                      }
+                      label="Continue as Admin"
                     />
                   )}
                 />

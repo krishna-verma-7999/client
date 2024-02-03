@@ -22,7 +22,7 @@ const taskSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
   priority: yup
     .string()
-    .oneOf(["low", "medium", "high"])
+    .oneOf(["not_hurry", "medium", "high"])
     .required("Priority is required"),
   timeEstimate: yup
     .number()
@@ -52,7 +52,7 @@ const CreateTask = () => {
       title: "",
       priority: "medium",
       timeEstimate: 0,
-      deadline: new Date(),
+      // deadline: ,
       assignedTo: "",
     },
   });
@@ -62,7 +62,7 @@ const CreateTask = () => {
       const token = localStorage.getItem("token");
       if (token) {
         const res: any = await AllEmployee();
-        console.log(res);
+        // console.log(res);
         setUsers(res.data);
       }
     }
@@ -74,7 +74,7 @@ const CreateTask = () => {
     const body = {
       ...values,
     };
-    console.log(values);
+    // console.log(values);
     const res: any = await createTask(body);
     if (res.data) {
       alert("Task has been created");
@@ -131,7 +131,7 @@ const CreateTask = () => {
                         label="Priority"
                         error={!!errors.priority}
                       >
-                        <MenuItem value="low">Low</MenuItem>
+                        <MenuItem value="not_hurry">Low</MenuItem>
                         <MenuItem value="medium">Medium</MenuItem>
                         <MenuItem value="high">High</MenuItem>
                       </Select>
@@ -165,7 +165,7 @@ const CreateTask = () => {
                     <TextField
                       {...field}
                       type="datetime-local"
-                      label="Deadline"
+                      label="hello"
                       fullWidth
                       error={!!errors.deadline}
                       helperText={errors.deadline && errors.deadline.message}

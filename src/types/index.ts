@@ -2,6 +2,7 @@ export interface CreateUser {
   name: string;
   email: string;
   password: string;
+  asAdmin: boolean;
 }
 
 export interface ResponseData {

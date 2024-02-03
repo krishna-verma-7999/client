@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 interface updateStatus {
-  assignedId: string;
+  assignedToId: string;
+  taskId: string;
   updatedStatus: string;
 }
 

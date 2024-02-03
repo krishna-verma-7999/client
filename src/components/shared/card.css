@@ -4,6 +4,7 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
+  box-shadow: 1px 1px 5px #0000002b;
 }
 
 .card__subtitle {
@@ -12,4 +13,10 @@
 .card__time {
   font-size: 10px;
   color: #2b2727;
+}
+.card__priority {
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
 }

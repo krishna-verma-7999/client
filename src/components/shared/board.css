@@ -12,6 +12,7 @@
   color: black;
   margin-inline: 0.5rem;
   margin-block: 0.5rem;
+  box-shadow: 1px 1px 5px #0000002b;
 }
 
 .kanban__section__title {

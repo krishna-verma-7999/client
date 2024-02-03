@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router";
 import AuthLayout from "./components/layout/auth-layout";
 import RootLayout from "./components/layout/root-layout";
 import CreateTask from "./components/pages/create-task";
+import Stats from "./components/pages/stats";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
       <Route element={<RootLayout />}>
         <Route index element={<Home />} />
         <Route path="/create-task" element={<CreateTask />} />
+        <Route path="/stats" element={<Stats />} />
       </Route>
     </Routes>
   );

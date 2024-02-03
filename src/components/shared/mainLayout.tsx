@@ -160,6 +160,7 @@ export default function MainLayout({
         >
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
+              onClick={() => navigate("/")}
               sx={{
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
@@ -209,7 +210,7 @@ export default function MainLayout({
                       justifyContent: "center",
                     }}
                   >
-                    <Route.icon />
+                    <Route.Icon />
                   </ListItemIcon>
                   <ListItemText
                     primary={Route.label}

@@ -16,6 +16,8 @@
     "@types/node": "^16.18.76",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
+    "date-fns": "^3.3.1",
+    "node-cron": "^3.0.3",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dnd": "^16.0.1",
@@ -56,6 +58,7 @@
     ]
   },
   "devDependencies": {
+    "@types/node-cron": "^3.0.11",
     "@types/react-beautiful-dnd": "^13.1.8"
   }
 }

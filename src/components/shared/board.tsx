@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from "react";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  OnDragEndResponder,
-} from "react-beautiful-dnd";
-import { KanbanBoards, Task, Todos } from "../../types";
+import { useEffect, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { Todos } from "../../types";
 import {
   useGetAllTodoTaskMutation,
   useUpdateTodoStatusMutation,
@@ -13,27 +8,28 @@ import {
 import { formatData } from "../../helper/kanbanFormatData";
 
 import "./board.css";
-import Card from "./card";
+import Card from "./Card";
 
 const Board = () => {
-  const [getTodos, { isLoading }] = useGetAllTodoTaskMutation();
+  const [getTodos] = useGetAllTodoTaskMutation();
   const [todos, setTodos] = useState<any[]>([]);
   const [updateStatus] = useUpdateTodoStatusMutation();
-  console.log(isLoading);
-  useEffect(() => {
-    async function getAllTodos() {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const res: any = await getTodos();
-        const todos: Todos[] = res.data;
-        if (todos?.length > 0) {
-          const formattedData = formatData(todos);
-          setTodos(formattedData);
-        }
-      }
+
+  async function getAllTodos() {
+    const res: any = await getTodos();
+    const todos: Todos[] = res.data;
+    console.log(todos);
+
+    if (todos?.length > 0) {
+      const formattedData = formatData(todos);
+      setTodos(formattedData);
+    } else {
+      return <h2>No data...</h2>;
     }
+  }
+  useEffect(() => {
     getAllTodos();
-  }, [isLoading]);
+  }, []);
 
   const onDragEnd = async (result: any) => {
     if (!result.destination) return;
@@ -51,7 +47,7 @@ const Board = () => {
       const sourceCol = todos[sourceColIndex];
       const destinationCol = todos[destinationColIndex];
 
-      console.log(destinationCol.id);
+      // console.log(destinationCol.id);
 
       const sourceTask = [...sourceCol.tasks];
 
@@ -63,58 +59,97 @@ const Board = () => {
       todos[sourceColIndex].tasks = [...sourceTask];
       todos[destinationColIndex].tasks = [...destinationTask];
 
-      const assignedId = removed.assignedTo;
+      // console.log(removed);
+      const assignedToId = removed.assignedTo;
+      const taskId = removed._id;
+      const currentStatus = sourceCol.id;
       const updatedStatus = destinationCol.id;
-      // console.log(assignedId, updatedStatus);
-      const res = await updateStatus({ assignedId, updatedStatus });
-      // console.log(res);
-      // setTodos(todos);
+      console.log(currentStatus, updatedStatus);
+      if (currentStatus === "failed") {
+        alert("Task already failed. You cannot update its status");
+        getAllTodos();
+        return;
+      }
+      if (currentStatus === "done") {
+        alert("Task already done. you cannot change it now!");
+        getAllTodos();
+        return;
+      }
+      const res: any = await updateStatus({
+        assignedToId,
+        taskId,
+        updatedStatus,
+      });
+      if (res?.data?.status === 401) {
+        alert("You cannot update the task that is not assigned to you");
+      } else if (res.data.status === 200) {
+        alert(
+          "Email has been sent to admin to notify that you have updated your status"
+        );
+      }
+      getAllTodos();
     }
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="kanban">
-        {todos.map((todo) => (
-          <Droppable key={todo.title} droppableId={todo.title}>
-            {(provided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="kanban__section"
-              >
-                <div className="kanban__section__title">{todo.title}</div>
+    <>
+      <h1>Kanban board</h1>
+      {todos.length > 0 ? (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="kanban">
+            {todos.map((todo) => (
+              <Droppable key={todo.title} droppableId={todo.title}>
+                {(provided) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    className="kanban__section"
+                  >
+                    <div className="kanban__section__title">{todo.title}</div>
 
-                <div className="kanban__section__content">
-                  {todo.tasks?.map((task: any, index: any) => (
-                    <Draggable
-                      key={task._id}
-                      index={index}
-                      draggableId={task._id}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                          style={{
-                            ...provided.draggableProps.style,
-                            opacity: snapshot.isDragging ? "0.5" : "1",
-                          }}
+                    <div className="kanban__section__content">
+                      {todo.tasks?.map((task: any, index: any) => (
+                        <Draggable
+                          key={task._id}
+                          index={index}
+                          draggableId={task._id}
                         >
-                          <Card task={task} />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              </div>
-            )}
-          </Droppable>
-        ))}
-      </div>
-    </DragDropContext>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.dragHandleProps}
+                              {...provided.draggableProps}
+                              style={{
+                                ...provided.draggableProps.style,
+                                opacity: snapshot.isDragging ? "0.5" : "1",
+                              }}
+                            >
+                              <Card task={task} status={todo.title} />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  </div>
+                )}
+              </Droppable>
+            ))}
+          </div>
+        </DragDropContext>
+      ) : (
+        <p
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingTop: "5rem",
+          }}
+        >
+          No Task.
+        </p>
+      )}
+    </>
   );
 };
 

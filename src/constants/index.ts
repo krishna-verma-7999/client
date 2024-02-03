@@ -1,16 +1,17 @@
 import { List } from "@mui/icons-material";
 import CreateIcon from "@mui/icons-material/Create";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import QueryStatsIcon from "@mui/icons-material/QueryStats";
 
 export const AdminRoutes = [
   {
     label: "Create Task",
-    icon: CreateIcon,
+    Icon: CreateIcon,
     link: "/create-task",
   },
   {
     label: "Dashboard",
-    icon: DashboardIcon,
+    Icon: DashboardIcon,
     link: "/",
   },
 ];
@@ -18,7 +19,12 @@ export const AdminRoutes = [
 export const UserRoutes = [
   {
     label: "My Task",
-    icon: List,
+    Icon: List,
     link: "/",
+  },
+  {
+    label: "My performance",
+    Icon: QueryStatsIcon,
+    link: "/stats",
   },
 ];
