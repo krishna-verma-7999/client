@@ -45,3 +45,7 @@ export interface UserDetails {
   role: string;
   email: string;
 }
+
+export interface valuesInterFace {
+  taskId: string;
+}

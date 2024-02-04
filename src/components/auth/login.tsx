@@ -31,8 +31,9 @@ const Login = () => {
 
   const submitHandler = async (values: yup.InferType<typeof loginSchema>) => {
     const res: any = await login(values);
-    if (res?.error?.status === 404) {
-      alert("Not found");
+    console.log(res);
+    if (res?.error?.status) {
+      alert(res.error.data.message);
     }
     if (res?.data?.status) {
       const token = res?.data.token;

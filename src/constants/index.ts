@@ -19,12 +19,17 @@ export const AdminRoutes = [
 export const UserRoutes = [
   {
     label: "My Task",
-    Icon: List,
+    Icon: DashboardIcon,
     link: "/",
   },
   {
     label: "My performance",
     Icon: QueryStatsIcon,
     link: "/stats",
+  },
+  {
+    label: "Tasks",
+    Icon: List,
+    link: "/tasks",
   },
 ];

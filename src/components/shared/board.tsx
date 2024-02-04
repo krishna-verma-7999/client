@@ -14,6 +14,7 @@ const Board = () => {
   const [getTodos] = useGetAllTodoTaskMutation();
   const [todos, setTodos] = useState<any[]>([]);
   const [updateStatus] = useUpdateTodoStatusMutation();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function getAllTodos() {
     const res: any = await getTodos();
@@ -28,7 +29,9 @@ const Board = () => {
     }
   }
   useEffect(() => {
+    setIsLoading(true);
     getAllTodos();
+    setIsLoading(false);
   }, []);
 
   const onDragEnd = async (result: any) => {
@@ -90,6 +93,10 @@ const Board = () => {
       getAllTodos();
     }
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>

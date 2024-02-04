@@ -70,6 +70,17 @@ export const myApi = createApi({
         body: { id },
       }),
     }),
+
+    assignedTask: builder.mutation<any, any>({
+      query: ({ taskId }) => ({
+        url: "/api/auth/assignedTask",
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: { taskId },
+      }),
+    }),
   }),
 });
 
@@ -80,4 +91,5 @@ export const {
   useGetAllTodoTaskMutation,
   useUpdateTodoStatusMutation,
   useGetUserByIdMutation,
+  useAssignedTaskMutation,
 } = myApi;
